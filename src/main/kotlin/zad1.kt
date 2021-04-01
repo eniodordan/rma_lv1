@@ -4,7 +4,7 @@ fun main() {
     val dices = mutableListOf<Dice>()
     for(i in 1..6) dices.add(Dice())
 
-    val game = Yahtzee(dices, 200)
+    val game = Yahtzee(dices, 3)
     var userInput: Int
 
     do {
@@ -19,14 +19,20 @@ fun main() {
                 println("You rolled following dices:")
                 game.showDices()
 
-                do {
-                    println("\nEnter index of dice you would like to lock (use 0 to exit):")
-                    userInput = Integer.valueOf(readLine())
+                if(game.attempts > 0) {
+                    do {
+                        println("\nEnter index of dice you would like to lock (use 0 to exit):")
+                        userInput = Integer.valueOf(readLine())
 
-                    if (userInput in 1..6) {
-                        game.dices[userInput - 1].lockDice()
+                        if (userInput in 1..6) {
+                            game.dices[userInput - 1].lockDice()
+                        }
+                    } while (userInput != 0 && !game.areAllLocked())
+                } else {
+                    for(dice in game.dices) {
+                        dice.lockDice()
                     }
-                } while (userInput != 0 && !game.areAllLocked())
+                }
             }
             1 -> {
                 println("Status of current dices:")
@@ -60,11 +66,10 @@ class Yahtzee (var dices: MutableList<Dice>, var attempts: Int) {
     }
 
     fun checkScale() : Boolean {
-        var isScale : Boolean = false;
-
+        dices.sortBy { it.number }
         for(i in 0 until dices.size -1) {
             if((dices[i].number + 1 != dices[i + 1].number) && (i != 0)) {
-                return false;
+                return false
             }
         }
 0
