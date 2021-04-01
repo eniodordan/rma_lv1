@@ -68,7 +68,7 @@ class Yahtzee (var dices: MutableList<Dice>, var attempts: Int) {
     fun checkScale() : Boolean {
         dices.sortBy { it.number }
         for(i in 0 until dices.size -1) {
-            if((dices[i].number + 1 != dices[i + 1].number) && (i != 0)) {
+            if((dices[i].number + 1 != dices[i + 1].number)) {
                 return false
             }
         }
